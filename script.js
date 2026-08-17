@@ -10,6 +10,7 @@ const COMMON_TRANSLATIONS = {
     backHome: "Back to homepage",
     backTop: "Back to top",
     language: "Choose language",
+    contact: "Contact",
     footer: "Made with love by Brice Lebrun — Tarragona, Spain — This is a personal, non-commercial portfolio website. All content is the property of Brice Lebrun. All rights reserved. No cookies are used. Information sent through the contact form is used only to reply.",
     lightbox: "Enlarged image",
     closeImage: "Close enlarged image",
@@ -24,6 +25,7 @@ const COMMON_TRANSLATIONS = {
     backHome: "Torna a la pàgina d’inici",
     backTop: "Torna a l’inici",
     language: "Tria l’idioma",
+    contact: "Contacte",
     footer: "Fet amb amor per Brice Lebrun — Tarragona, Espanya — Aquest és un web de portafolis personal i no comercial. Tot el contingut és propietat de Brice Lebrun. Tots els drets reservats. No s’utilitzen galetes. La informació enviada mitjançant el formulari de contacte només s’utilitza per respondre.",
     lightbox: "Imatge ampliada",
     closeImage: "Tanca la imatge ampliada",
@@ -38,6 +40,7 @@ const COMMON_TRANSLATIONS = {
     backHome: "Volver a la página de inicio",
     backTop: "Volver al inicio",
     language: "Elegir idioma",
+    contact: "Contacto",
     footer: "Hecho con amor por Brice Lebrun — Tarragona, España — Este es un sitio web de portafolio personal y no comercial. Todo el contenido es propiedad de Brice Lebrun. Todos los derechos reservados. No se utilizan cookies. La información enviada mediante el formulario de contacto solo se utiliza para responder.",
     lightbox: "Imagen ampliada",
     closeImage: "Cerrar la imagen ampliada",
@@ -52,6 +55,7 @@ const COMMON_TRANSLATIONS = {
     backHome: "Retour à l’accueil",
     backTop: "Retour en haut",
     language: "Choisir la langue",
+    contact: "Contact",
     footer: "Créé avec amour par Brice Lebrun — Tarragone, Espagne — Ce site est un portfolio personnel et non commercial. Tout son contenu est la propriété de Brice Lebrun. Tous droits réservés. Aucun cookie n’est utilisé. Les informations envoyées via le formulaire de contact servent uniquement à vous répondre.",
     lightbox: "Image agrandie",
     closeImage: "Fermer l’image agrandie",
@@ -169,6 +173,8 @@ function translatePage(language) {
   picker?.querySelector(".language-picker-toggle")?.setAttribute("aria-label", common.language);
   picker?.querySelector(".language-picker-options")?.setAttribute("aria-label", common.language);
 
+  document.querySelector(".contact-shortcut")?.setAttribute("aria-label", common.contact);
+
   const footer = document.querySelector(".site-footer p");
   if (footer) footer.textContent = common.footer;
 
@@ -212,8 +218,9 @@ function translatePage(language) {
 
 function setupLanguageSelector() {
   const header = document.querySelector(".site-header .nav-wrap");
+  const actions = header?.querySelector(".header-actions");
   const toggle = header?.querySelector(".menu-toggle");
-  if (!header || !toggle) return;
+  if (!header || !actions || !toggle) return;
 
   const picker = document.createElement("div");
   picker.className = "language-picker";
@@ -231,7 +238,7 @@ function setupLanguageSelector() {
       <button type="button" role="menuitemradio" data-language="fr">FR</button>
     </div>
   `;
-  header.insertBefore(picker, toggle);
+  actions.prepend(picker);
 
   const pickerToggle = picker.querySelector(".language-picker-toggle");
   const options = picker.querySelector(".language-picker-options");
@@ -288,9 +295,9 @@ function setupMobileNavigation() {
   const brand = headerContent?.querySelector(".brand");
   const nav = header?.querySelector("nav");
   const toggle = header?.querySelector(".menu-toggle");
-  const picker = headerContent?.querySelector(".language-picker");
+  const actions = headerContent?.querySelector(".header-actions");
 
-  if (!header || !headerContent || !brand || !nav || !toggle || !picker) return;
+  if (!header || !headerContent || !brand || !nav || !toggle || !actions) return;
 
   const mobileQuery = window.matchMedia("(max-width: 1100px)");
   document.documentElement.classList.add("nav-enhanced");
@@ -305,9 +312,9 @@ function setupMobileNavigation() {
   const syncNavigation = () => setOpen(false);
   const syncHeaderOrder = () => {
     if (mobileQuery.matches) {
-      headerContent.append(picker, brand, toggle, nav);
+      headerContent.append(actions, brand, toggle, nav);
     } else {
-      headerContent.append(brand, nav, picker, toggle);
+      headerContent.append(brand, nav, actions, toggle);
     }
   };
 

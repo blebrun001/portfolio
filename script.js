@@ -2,7 +2,7 @@ const SUPPORTED_LANGUAGES = ["en", "ca", "es", "fr"];
 
 const COMMON_TRANSLATIONS = {
   en: {
-    nav: ["Photography", "DataViz", "3D", "Infographics", "Branding", "Print", "Contact"],
+    nav: ["Infographics", "3D", "DataViz", "Branding", "Photography", "Print", "Contact"],
     skip: "Skip to content",
     navigation: "Main navigation",
     openMenu: "Open navigation menu",
@@ -17,7 +17,7 @@ const COMMON_TRANSLATIONS = {
     enlargeImage: "enlarge image",
   },
   ca: {
-    nav: ["Fotografia", "Dades", "3D", "Infografies", "Identitat", "Impressió", "Contacte"],
+    nav: ["Infografia", "3D", "DataViz", "Branding", "Fotografia", "Impressió", "Contacte"],
     skip: "Ves al contingut",
     navigation: "Navegació principal",
     openMenu: "Obre el menú de navegació",
@@ -32,7 +32,7 @@ const COMMON_TRANSLATIONS = {
     enlargeImage: "amplia la imatge",
   },
   es: {
-    nav: ["Fotografía", "Datos", "3D", "Infografías", "Identidad", "Impresión", "Contacto"],
+    nav: ["Infografía", "3D", "DataViz", "Branding", "Fotografía", "Impresión", "Contacto"],
     skip: "Ir al contenido",
     navigation: "Navegación principal",
     openMenu: "Abrir el menú de navegación",
@@ -47,7 +47,7 @@ const COMMON_TRANSLATIONS = {
     enlargeImage: "ampliar imagen",
   },
   fr: {
-    nav: ["Photographie", "Données", "3D", "Infographies", "Identité", "Impression", "Contact"],
+    nav: ["Infographie", "3D", "DataViz", "Branding", "Photographie", "Impression", "Contact"],
     skip: "Aller au contenu",
     navigation: "Navigation principale",
     openMenu: "Ouvrir le menu de navigation",
@@ -170,8 +170,7 @@ function translatePage(language) {
   }
 
   const picker = document.querySelector(".language-picker");
-  picker?.querySelector(".language-picker-toggle")?.setAttribute("aria-label", common.language);
-  picker?.querySelector(".language-picker-options")?.setAttribute("aria-label", common.language);
+  picker?.querySelector(".language-picker-select")?.setAttribute("aria-label", common.language);
 
   document.querySelector(".contact-shortcut")?.setAttribute("aria-label", common.contact);
 
@@ -225,65 +224,25 @@ function setupLanguageSelector() {
   const picker = document.createElement("div");
   picker.className = "language-picker";
   picker.innerHTML = `
-    <button class="language-picker-toggle" type="button" aria-expanded="false" aria-haspopup="menu" aria-controls="language-options">
-      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <circle cx="12" cy="12" r="9"></circle>
-        <path d="M3 12h18M12 3c2.5 2.5 3.8 5.5 3.8 9S14.5 18.5 12 21M12 3C9.5 5.5 8.2 8.5 8.2 12S9.5 18.5 12 21"></path>
-      </svg>
-    </button>
-    <div class="language-picker-options" id="language-options" role="menu" hidden>
-      <button type="button" role="menuitemradio" data-language="en">EN</button>
-      <button type="button" role="menuitemradio" data-language="ca">CA</button>
-      <button type="button" role="menuitemradio" data-language="es">ES</button>
-      <button type="button" role="menuitemradio" data-language="fr">FR</button>
-    </div>
+    <svg class="language-picker-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M3 12h18M12 3c2.5 2.5 3.8 5.5 3.8 9S14.5 18.5 12 21M12 3C9.5 5.5 8.2 8.5 8.2 12S9.5 18.5 12 21"></path>
+    </svg>
+    <select class="language-picker-select">
+      <option value="en">EN</option>
+      <option value="ca">CA</option>
+      <option value="es">ES</option>
+      <option value="fr">FR</option>
+    </select>
   `;
   actions.prepend(picker);
 
-  const pickerToggle = picker.querySelector(".language-picker-toggle");
-  const options = picker.querySelector(".language-picker-options");
-  const languageButtons = Array.from(options.querySelectorAll("[data-language]"));
-
-  const syncSelectedLanguage = () => {
-    languageButtons.forEach((button) => {
-      button.setAttribute("aria-checked", String(button.dataset.language === currentLanguage));
-    });
-  };
-
-  const setPickerOpen = (open) => {
-    pickerToggle.setAttribute("aria-expanded", String(open));
-    options.hidden = !open;
-    if (open) {
-      options.querySelector(`[data-language="${currentLanguage}"]`)?.focus();
-    }
-  };
-
-  pickerToggle.addEventListener("click", () => {
-    setPickerOpen(pickerToggle.getAttribute("aria-expanded") !== "true");
-  });
-
-  syncSelectedLanguage();
-  options.addEventListener("click", (event) => {
-    const languageButton = event.target.closest("[data-language]");
-    if (!languageButton) return;
-
-    currentLanguage = languageButton.dataset.language;
+  const select = picker.querySelector(".language-picker-select");
+  select.value = currentLanguage;
+  select.addEventListener("change", () => {
+    currentLanguage = select.value;
     localStorage.setItem("portfolio-language", currentLanguage);
-    syncSelectedLanguage();
     translatePage(currentLanguage);
-    setPickerOpen(false);
-    pickerToggle.focus();
-  });
-
-  document.addEventListener("click", (event) => {
-    if (!picker.contains(event.target)) setPickerOpen(false);
-  });
-
-  picker.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      setPickerOpen(false);
-      pickerToggle.focus();
-    }
   });
 
   translatePage(currentLanguage);

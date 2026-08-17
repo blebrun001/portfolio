@@ -284,10 +284,13 @@ function setupLanguageSelector() {
 
 function setupMobileNavigation() {
   const header = document.querySelector(".site-header");
+  const headerContent = header?.querySelector(".nav-wrap");
+  const brand = headerContent?.querySelector(".brand");
   const nav = header?.querySelector("nav");
   const toggle = header?.querySelector(".menu-toggle");
+  const picker = headerContent?.querySelector(".language-picker");
 
-  if (!header || !nav || !toggle) return;
+  if (!header || !headerContent || !brand || !nav || !toggle || !picker) return;
 
   const mobileQuery = window.matchMedia("(max-width: 1100px)");
   document.documentElement.classList.add("nav-enhanced");
@@ -300,6 +303,13 @@ function setupMobileNavigation() {
   };
 
   const syncNavigation = () => setOpen(false);
+  const syncHeaderOrder = () => {
+    if (mobileQuery.matches) {
+      headerContent.append(picker, brand, toggle, nav);
+    } else {
+      headerContent.append(brand, nav, picker, toggle);
+    }
+  };
 
   toggle.addEventListener("click", () => {
     setOpen(toggle.getAttribute("aria-expanded") !== "true");
@@ -316,7 +326,11 @@ function setupMobileNavigation() {
     }
   });
 
-  mobileQuery.addEventListener("change", syncNavigation);
+  mobileQuery.addEventListener("change", () => {
+    syncHeaderOrder();
+    syncNavigation();
+  });
+  syncHeaderOrder();
   syncNavigation();
 }
 

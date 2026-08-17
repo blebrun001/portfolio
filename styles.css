@@ -910,6 +910,25 @@ body:has(> main.detail-main) {
   .footer-wrap p {
     grid-column: 1 / -1;
   }
+
+  .site-footer {
+    padding-block: 8px;
+  }
+
+  .footer-wrap {
+    row-gap: 6px;
+  }
+
+  .footer-wrap img {
+    width: 36px;
+    justify-self: center;
+  }
+
+  .footer-wrap p {
+    font-size: 0.68rem;
+    line-height: 1.4;
+    text-align: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
